@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+        <title> Lucky for Life </title>
+        <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <h1> Lucky for Life </h1>
+    <h2>Your pick: <span id="your_pick"></span> </h2>
+    <h2>Your pick after sorting: <span id="sorted_pick"></span></h2>
+    <h2>Your lucky ball: <span id="pick_lucky"></span> </h2>
+    <h2>Winning pick: <span id="winning_pick"></span></h2>
+    <h2>Winning lucky ball: <span id="winning_lucky"></span> </h2>
+    <h2>Number Matching: <span id="num_match"></span></h2>
+    <h2>Lucky Ball Matching: <span id="lucky_match"></span></h2>
+    <h2>Winning summary: <span id="pick_payout"></span></h2>
+
+    <script language = "javascript">
+        function num_generator(max) {
+            return Math.floor(Math.random() * max) + 1;
+        }
+
+        var pick = [];
+        function get_nums(pick){
+                while (pick.length < 5) {
+                    num = num_generator(48);
+                    pick.push(num);
+                }
+                return pick;
+        }
+
+        pick = get_nums(pick);
+        for (i = 0; i < 5; i++) {
+            document.getElementById("your_pick").innerHTML += pick[i] + " ";
+        }
+
+        pick = pick.sort((a,b) => a - b);
+        for (i = 0; i < 5; i++) {
+            document.getElementById("sorted_pick").innerHTML += pick[i] + " ";
+        }
+
+        var lucky_ball = num_generator(18);
+        document.getElementById("pick_lucky").innerHTML = lucky_ball
+
+
+        var winning_array = [12, 15, 24, 35, 48];
+        for (i = 0; i < 5; i++) {
+            document.getElementById("winning_pick").innerHTML += winning_array[i] + " ";
+        }
+        var winning_ball = 3;
+        document.getElementById("winning_lucky").innerHTML = winning_ball
+
+        var match = 0;
+        for (i = 0; i < 5; i++) {
+            for(j = 0; j < 5 ; j++){
+                if(pick[i] == winning_array[j]){
+                    match ++;
+                    winning_array[j] = -1;
+                }
+            }
+        }
+
+        document.getElementById("num_match").innerHTML = match;
+
+        var lucky_flag = false;
+        if (lucky_ball == winning_ball){
+            lucky_flag = true;
+            document.getElementById("lucky_match").innerHTML = "Lucky Ball matched!"
+        } else {
+            document.getElementById("lucky_match").innerHTML = "Lucky Ball not matched :("
+        }
+
+        var payout = "";
+        function calc_payout(lucky_flag, match){
+            switch(match){
+                case 0:
+                    return lucky_flag? "$4" : "$0";
+                case 1:
+                    return lucky_flag? "$6" : "$0";
+                case 2:
+                    return lucky_flag? "$25" : "$3"; 
+                case 3:
+                    return lucky_flag? "$150" : "$20"; 
+                case 4:
+                    return lucky_flag? "$5000" : "$200";
+                case 5:
+                    return lucky_flag? "$7000 a WEEK for LIFE" : "$25000 a YEAR for LIFE";
+            }
+        }
+        payout = calc_payout(lucky_flag, match);
+        document.getElementById("pick_payout").innerHTML = payout;
+
+    </script>
+
+    <div>
+        <img src = "timmy-tommy.png" class ="display"/>
+    </div>
+
+
+  </body>
+
+
+
+</html>
